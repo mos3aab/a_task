@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,19 @@ use Illuminate\Support\Facades\Route;
 */
 // Route::get('/login',function()})->name('login');;
 Route::get('/', function () {
-    
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
+
+//  products
+Route::get('/products',[ProductController::class, 'index'])->name('products');
+Route::get('/addProduct',[ProductController::class, 'create'])->name('addProduct');
+
+
+//  categories
+Route::get('/categories',[ CategoryController::class, 'index'])->name('categories');
+Route::get('/addCategory',[CategoryController::class, 'create'])->name('addCategory');
+Route::post('/addCatalog',[CategoryController::class, 'store']);
+Route::get('/editCatalog/{id}',[CategoryController::class, 'edit']);
+Route::post('/upadteCategory/{id}',[CategoryController::class, 'update']);
+Route::get('/deleteCatalog/{id}',[CategoryController::class, 'destroy']);
+

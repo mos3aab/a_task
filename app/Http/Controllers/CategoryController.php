@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\category;
 use Illuminate\Http\Request;
+use DB;
 
 class CategoryController extends Controller
 {
@@ -14,7 +15,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $data = DB::select("SELECT ca.*,cb.catageory_name AS parentName from `categories` as `ca` LEFT join `categories` as `cb` on `cb`.`id` = `ca`.`parent_cateegory` WHERE `ca`.`parent_cateegory` >= 0");
+        // index of all categories 
+        return view('categories.index', [
+            'categories' =>$data
+        ]);
     }
 
     /**
@@ -24,7 +29,11 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = category::where('parent_cateegory','=',0)->get();
+        // form for add category 
+        return view('categories.add',[
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -35,7 +44,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // persist category 
+        $request->validate([
+            'catageory_name' => 'required',
+        ]);
+  
+        category::insert( [
+            'catageory_name' => $request->catageory_name, 'parent_cateegory' => $request->parent_cateegory,
+            'is_active' => $request->is_active
+        ]);
+        return redirect()->route('categories')->with('success','Category Added Successfully.');
     }
 
     /**
@@ -47,6 +65,7 @@ class CategoryController extends Controller
     public function show(category $category)
     {
         //
+
     }
 
     /**
@@ -55,9 +74,17 @@ class CategoryController extends Controller
      * @param  \App\Models\category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(category $category)
+    public function edit(category $category,$id)
     {
-        //
+        // edit for udpate 
+        $getCateg = category::where('id','=',$id)->get();
+        $categories = category::where('id','!=',$id)->where('parent_cateegory','=',0)->get();
+        
+        return view('categories.edit', [
+            'category' => $getCateg,
+            'categories' => $categories
+        ]);
+        
     }
 
     /**
@@ -67,9 +94,15 @@ class CategoryController extends Controller
      * @param  \App\Models\category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, category $category)
+    public function update(Request $request, category $category,$id)
     {
-        //
+        // update catalog 
+        category::where('id',$id)->update( [
+            'catageory_name' => $request->catageory_name, 'parent_cateegory' => $request->parent_cateegory,
+            'is_active' => $request->is_active
+        ]);
+        return redirect()->route('categories')->with('success','Category Updated Successfully.');
+        
     }
 
     /**
@@ -78,8 +111,14 @@ class CategoryController extends Controller
      * @param  \App\Models\category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(category $category)
+    public function destroy(category $category,$id)
     {
-        //
+        // Delete and change children to parent 
+        category::where('parent_cateegory',$id)->update( [
+            'parent_cateegory' => 0,
+        ]);
+        category::where('id',$id)->delete();
+        return redirect()->route('categories')->with('success','Category Deleted Successfully.');
+        
     }
 }
