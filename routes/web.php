@@ -16,12 +16,16 @@ use App\Http\Controllers\CategoryController;
 */
 // Route::get('/login',function()})->name('login');;
 Route::get('/', function () {
-    return view('home');
+    return redirect()->route('products')->with('success','Wlecome to Admin.');
 })->name('home');
 
 //  products
 Route::get('/products',[ProductController::class, 'index'])->name('products');
 Route::get('/addProduct',[ProductController::class, 'create'])->name('addProduct');
+Route::post('/addProduct',[ProductController::class, 'store']);
+Route::get('/editProduct/{id}',[ProductController::class, 'edit']);
+Route::post('/updateProduct/{id}',[ProductController::class, 'update']);
+Route::get('/deleteProduct/{id}',[ProductController::class, 'destroy']);
 
 
 //  categories

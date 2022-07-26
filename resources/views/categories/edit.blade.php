@@ -6,7 +6,7 @@
 </style>
 @section('content')
 
-<h2 align="center" style="margin-top:10%">Add Category</h2>
+<h2 align="center" style="margin-top:10%">Update Category</h2>
     
     <div class="container" >
 
@@ -48,7 +48,7 @@
 
             <div class="row">
                 <div class="col col-md-3">
-                    <input class="btn btn-info" type="submit" value="submit">
+                    <input class="btn btn-info" type="submit" value="update">
                 </div>
             </div>
         </form>

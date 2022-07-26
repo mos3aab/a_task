@@ -15,8 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $data = DB::select("SELECT ca.*,cb.catageory_name AS parentName from `categories` as `ca` LEFT join `categories` as `cb` on `cb`.`id` = `ca`.`parent_cateegory` WHERE `ca`.`parent_cateegory` >= 0");
         // index of all categories 
+        $data = DB::select("SELECT ca.*,cb.catageory_name AS parentName from `categories` as `ca` LEFT join `categories` as `cb` on `cb`.`id` = `ca`.`parent_cateegory` WHERE `ca`.`parent_cateegory` >= 0");
         return view('categories.index', [
             'categories' =>$data
         ]);
@@ -84,7 +84,6 @@ class CategoryController extends Controller
             'category' => $getCateg,
             'categories' => $categories
         ]);
-        
     }
 
     /**
