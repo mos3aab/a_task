@@ -1,4 +1,4 @@
-# algoriza_task on laravel 9.x
+# Task on laravel 9.x
 
 #### Requirement to run App 
 
